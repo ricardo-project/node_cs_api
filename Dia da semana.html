@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang=en>
+<style>
+    section {
+        margin: 0px auto;
+        width: 420px;
+        display: flex;
+        flex-wrap: wrap;
+    } section > div {
+        width: 60px;
+        height: 30px;
+    } section > div > div {
+        width: 56px;
+        height: 26px;
+        color: rgb(180,180,180);
+        margin: 2px
+    }
+</style>
+<head>
+    <meta charset=UTF-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width, initial-scale=1.0">
+    <title>Dia da semana</title>
+</head>
+<body>
+    <p>Qual o dia da semana?</p>
+    <p><input type=date></p>
+    <p id=day>Data não inserida!</p>
+    <section></section>
+</body>
+<script>
+    let dias = ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"]
+    let mes = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    let corMes = ["saddlebrown", "brown"]
+    let S = document.querySelector("section")
+    for(let a = 1; a <= 4; a++) {
+        for(let m = 1; m <= mes.length; m++) {
+            let compr = mes[m - 1]
+            for(let d = 1; d <= compr; d++) {
+                S.innerHTML += "<div><div style='background: " + corMes[m % 2] + "'>" + d + "/" + m + "/" + a + "</div></div>"
+            }
+        }
+    }
+    document.querySelector("input[type=date]").addEventListener("input", function() {
+        let valor = this.value
+        if(valor == "") {
+            day.innerHTML = "Data não inserida!"
+        } else {
+            let inform = valor.split("-")
+            let ano = parseFloat(inform[0])
+            let lastAno = ano - 1
+            let mes = parseFloat(inform[1]) - 1
+            let addBissext = Math.floor(ano/4) - Math.floor((ano - 1)/4) - Math.floor(ano/100) + Math.floor((ano - 1)/100) + Math.floor(ano/400) - Math.floor((ano - 1)/400)
+
+            let quant = lastAno*365 + Math.floor(lastAno/4) - Math.floor(lastAno/100) + Math.floor(lastAno/400)
+            /* ADICIONANDO ANOS */
+            quant += 30*mes + Math.floor((mes + Math.floor(mes/8) + 1)/2) + (addBissext - 2)*Math.ceil((mes - 1)/11)
+            /* ADICIONANDO MESES */
+            quant += parseFloat(inform[2]) - 1
+
+            day.innerHTML = dias[quant % 7]
+        }
+    });
+</script>
+</html>
